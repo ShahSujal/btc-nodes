@@ -15,10 +15,14 @@ const router = createBrowserRouter([
 ]);
 import { store } from '@/lib/rtk/store.ts'
 import { Provider } from 'react-redux'
+import { ThemeProvider } from './lib/provider/theme-provider.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+
     <Provider store={store}>
    <RouterProvider router={router}/>
     </Provider>
+        </ThemeProvider>
   </StrictMode>,
 )
