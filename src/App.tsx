@@ -1,5 +1,6 @@
 import NavBar from "./components/global/navbar"
 import SideBar from "./components/global/sidebar"
+import Transaction from "./components/transaction"
 import Wallet from "./components/wallet"
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <NavBar/>
    <div className=" flex flex-row justify-center items-center ">
    <SideBar/>
-   <Wallet/>
+   {/* <Wallet/> */}
+   <Transaction/>
    </div>
    </div>
   )
