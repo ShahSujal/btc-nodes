@@ -8,10 +8,6 @@ function App() {
       <NavBar />
       <div className="flex flex-row items-center justify-center ">
         <SideBar />
-        {/* <Wallet /> */}
-
-        {/* <button>click</button> */}
-        {/* <Transaction/> */}
         <Wallet/>
       </div>
     </div>
