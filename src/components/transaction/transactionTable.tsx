@@ -23,6 +23,8 @@ const TransactionTable = () => {
   );
   const [triggerGetWalletTransactions] = useLazyGetWalletTransactionsQuery();
 
+
+  // Best approach according to me to do this of 2 sec interval is to use kafka . create a pub and sub topics and create a backend server to listen to the kafka topic when any new node arries then backend will take that data and send to frontend socket and all this kafka operation we can do with custom docker image of kafka and zookeeper .check unicorn ai project i have done this same thing in that project
   useEffect(() => {
     const intervalId = setInterval(() => {
      wallets.forEach(async (wallet: Wallet) => {

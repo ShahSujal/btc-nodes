@@ -4,7 +4,7 @@ import { TransactionsResponse, Txref } from '@/types/common';
 export const walletApi = createApi({
   reducerPath: 'walletApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api.blockcypher.com/v1/btc/test3/', // Base URL 
+    baseUrl: 'https://api.blockcypher.com/v1/btc/test3/', // base URL of blockypher bitcoin testnet
   }),
   endpoints: (builder) => ({
     getWalletTransactions: builder.query<Txref[], string>({

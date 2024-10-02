@@ -9,7 +9,7 @@ const Transactions = () => {
   const totalTransactionCount = useSelector(
     (state: any) => state.totalTransactions.totalTransactions
   );
-  
+
   return (
     <div className="flex flex-col items-center w-full h-full max-sm:w-full ">
       <div className="  h-[60px] flex justify-start w-10/12 items-start ">

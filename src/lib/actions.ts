@@ -31,7 +31,10 @@ export const btcImportWallet = (mnemonic: string): TResponseType => {
     network: networks.bitcoin,
   });
   if (!address) {
-    throw new Error("Address generation failed");
+    return {
+      status: EStatus.Error,
+      message: 'Error in extracting address',
+    };
   }
   return {
     status: EStatus.Success,
