@@ -19,11 +19,13 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "./lib/provider/theme-provider.tsx";
 import {store} from "./lib/rtk/store/store.ts";
 import TransactionPage from "./components/transaction/index.tsx";
+import { Toaster } from "./components/ui/toaster.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Provider store={store}>
         <RouterProvider router={router} />
+        <Toaster />
       </Provider>
     </ThemeProvider>
   </StrictMode>

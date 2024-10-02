@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Wallet } from "@/types/common";
 import { btcImportWallet } from "@/lib/actions";
 import { EStatus } from "@/types/enum";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   walletname: z.string().min(4, {
@@ -38,6 +39,7 @@ const formSchema = z.object({
 });
 
 const Wallets = () => {
+  const { toast } = useToast();
   const dispatch = useDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,18 +52,35 @@ const Wallets = () => {
     (state: { wallets: { wallets: Wallet[] } }) => state.wallets.wallets
   );
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const checkMenonic = btcImportWallet(values.mnemonic);
-    if (checkMenonic.status === EStatus.Error) {
-      
+    try {
+      const checkMenonic = btcImportWallet(values.mnemonic);
+      if (checkMenonic.status === EStatus.Error) {
+        toast({
+          title: "Error",
+          description: checkMenonic.message,
+        });
+      }
+      dispatch(
+        addWallet({ mnemonic: values.mnemonic, walletName: values.walletname })
+      );
+      form.reset();
+      toast({
+        title: "Success",
+        description: `Wallet address ${checkMenonic.message.slice(
+          0,
+          10
+        )}.. added successfully`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: `Something went wrong`,
+      });
     }
-    dispatch(addWallet({ mnemonic: values.mnemonic, walletName: values.walletname }));
-
-    form.reset();
-    
   }
 
   return (
-    <div className="w-[calc(100%-350px)] h-[calc(100vh-110px)]  flex flex-col items-center  ">
+    <div className="w-[calc(100%-350px)] max-sm:w-full  h-[calc(100vh-110px)]  flex flex-col items-center  ">
       <div className=" w-full h-[60px] flex justify-end items-end ">
         <Dialog>
           <DialogTrigger>
@@ -73,7 +92,7 @@ const Wallets = () => {
               import wallet
             </Button>
           </DialogTrigger>
-          <DialogContent className=" bg-[#171C23] w-[750px] h-[450px] flex justify-evenly items-center flex-col">
+          <DialogContent className=" bg-[#171C23] w-[750px] max-sm:w-full h-[450px] flex justify-evenly items-center flex-col">
             <DialogHeader>
               <DialogTitle>Import Wallet</DialogTitle>
             </DialogHeader>
@@ -87,7 +106,7 @@ const Wallets = () => {
                   control={form.control}
                   name="walletname"
                   render={({ field }) => (
-                    <FormItem className="text-[#A6A2A2] w-2/3">
+                    <FormItem className="text-[#A6A2A2] w-2/3 max-sm:w-full">
                       <FormLabel>Enter your wallet name:</FormLabel>
                       <FormControl>
                         <Input
@@ -104,7 +123,7 @@ const Wallets = () => {
                   control={form.control}
                   name="mnemonic"
                   render={({ field }) => (
-                    <FormItem className="text-[#A6A2A2] my-3 w-2/3">
+                    <FormItem className="text-[#A6A2A2] my-3 w-2/3 max-sm:w-full">
                       <FormLabel>Enter your Mnemonic:</FormLabel>
                       <FormControl>
                         <Textarea
@@ -130,13 +149,9 @@ const Wallets = () => {
       </div>
       {wallets.length > 0 ? (
         <div className="w-full ">
-          <h1
-            className=" w-10/12 border-b py-3 border-[#1A1F26] pl-7 mt-20 mb-6 text-[12px] ml-4 text-[#ADABAA]
-"
-          >
-            Total Coins - {wallets.length}
+          <h1 className=" w-10/12 border-b py-3 border-[#1A1F26] pl-7 mt-20 mb-6 text-[12px] ml-4 text-[#ADABAA]">
+            Total Wallets - {wallets.length}
           </h1>
-          {/* <WalletTable/> */}
           <div className="w-10/12 ">
             <WalletTable />
           </div>

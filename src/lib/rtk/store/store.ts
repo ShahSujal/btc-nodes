@@ -1,22 +1,25 @@
-// src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
-import { walletApi } from '../query/getAllTransactions';
+import { balanceSlice } from '../query/walletDetailsSlice'; 
+import { walletApi } from "../query/getAllTransactions"
 import walletsReducer from '../slice/walletsSlice';
 import transactionReducer from '../slice/transactionSlice';
 import totalTransactionsReducer from '../slice/totalTransactions';
-import BalanceReducer from '../slice/walletBalanceSlice';
+import walletBalanceReducer from '../slice/walletBalanceSlice';
+import sidebarReducer from '../slice/sidebarSlice';
 export const store = configureStore({
   reducer: {
-    [walletApi.reducerPath]: walletApi.reducer,
+    [balanceSlice.reducerPath]: balanceSlice.reducer,
+    [walletApi.reducerPath]: walletApi.reducer, 
+    sidebar: sidebarReducer,
     wallets: walletsReducer,
-    transaction: transactionReducer, 
+    transactions: transactionReducer,
     totalTransactions: totalTransactionsReducer,
-    balance: BalanceReducer,
+    walletBalances: walletBalanceReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(walletApi.middleware),
+    getDefaultMiddleware().concat(balanceSlice.middleware), 
 });
 
-
+// Define the RootState type
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

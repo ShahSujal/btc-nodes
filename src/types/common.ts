@@ -2,7 +2,7 @@ import { EStatus } from "./enum";
 
 export type TSideBarTab = {
     to: string;
-    iconSrc: string;
+    icon: JSX.Element;
     label: string;
 }
 
