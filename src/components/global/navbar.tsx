@@ -31,6 +31,7 @@ const NavBar = () => {
               updateWalletTransactions({
                 address: wallet.address,
                 transactions: result.data,
+                walletName: wallet.walletName,
               })
             );
           }
@@ -75,7 +76,7 @@ const NavBar = () => {
 
   return (
     <nav className=" flex justify-between px-[80px] max-sm:px-2 items-center flex-row w-full h-[90px]">
-      <div className=" flex flex-row text-white justify-between w-[77px] font-extrabold text-[15px] items-center space-x-3">
+      <div className=" flex flex-row text-white justify-between w-[77px] font-extrabold text-[15px] font-Avenir items-center space-x-3">
         <img
           src="/cySync.svg"
           alt="CySync Logo"
