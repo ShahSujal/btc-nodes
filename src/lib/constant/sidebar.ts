@@ -7,7 +7,7 @@ export const siderbarTabs:TSideBarTab[] = [
     label: "Wallets",
   },
   {
-    to: "/last-transaction",
+    to: "/transactions",
     iconSrc: "/arrows.svg",
     label: "Last Transaction",
   },

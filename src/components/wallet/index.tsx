@@ -4,17 +4,62 @@ import WalletTable from "./walletTable";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Label } from "../ui/label";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { addWallet } from "@/lib/rtk/slice/walletsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Wallet } from "@/types/common";
+import { btcImportWallet } from "@/lib/actions";
+import { EStatus } from "@/types/enum";
 
-const Wallet = () => {
+const formSchema = z.object({
+  walletname: z.string().min(4, {
+    message: "Wallet Name must be at least 4 characters.",
+  }),
+  mnemonic: z.string().min(20, {
+    message: "Mnemonic Name must be at least 20 characters.",
+  }),
+});
+
+const Wallets = () => {
+  const dispatch = useDispatch();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      walletname: "",
+      mnemonic: "",
+    },
+  });
+  const wallets = useSelector(
+    (state: { wallets: { wallets: Wallet[] } }) => state.wallets.wallets
+  );
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const checkMenonic = btcImportWallet(values.mnemonic);
+    if (checkMenonic.status === EStatus.Error) {
+      
+    }
+    dispatch(addWallet({ mnemonic: values.mnemonic, walletName: values.walletname }));
+
+    form.reset();
+    
+  }
+
   return (
     <div className="w-[calc(100%-350px)] h-[calc(100vh-110px)]  flex flex-col items-center  ">
       <div className=" w-full h-[60px] flex justify-end items-end ">
@@ -24,7 +69,7 @@ const Wallet = () => {
               variant={"default"}
               className="bg-[#191E26] hover:bg-[#191E26] uppercase border-[0.5px] border-[#242830] text-white"
             >
-              <img src="/addWallet.svg" className=" w-3 h-3 mr-1" alt="" />{" "}
+              <img src="/addWallet.svg" className="w-3 h-3 mr-1 " alt="" />{" "}
               import wallet
             </Button>
           </DialogTrigger>
@@ -33,34 +78,77 @@ const Wallet = () => {
               <DialogTitle>Import Wallet</DialogTitle>
             </DialogHeader>
 
-            <div className=" h-[40px] text-[#A6A2A2] w-2/3">
-              <Label>Enter your wallet name:</Label>
-              <Input placeholder="" className=" max-w-lg bg-[#20242B]"/>
-            </div>
-            <div className=" min-h-[90px] text-[#A6A2A2] w-2/3">
-              <Label>Enter your Mnemonic:</Label>
-              <Textarea placeholder="" className=" max-w-lg h-36 bg-[#20242B]"/>
-            </div>
-
-            <DialogFooter>
-              <Button className="bg-[#DB953C]" variant={"ghost"}>Submit</Button>
-            </DialogFooter>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col items-center w-full justify-evenly"
+              >
+                <FormField
+                  control={form.control}
+                  name="walletname"
+                  render={({ field }) => (
+                    <FormItem className="text-[#A6A2A2] w-2/3">
+                      <FormLabel>Enter your wallet name:</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=""
+                          className=" max-w-lg bg-[#20242B]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mnemonic"
+                  render={({ field }) => (
+                    <FormItem className="text-[#A6A2A2] my-3 w-2/3">
+                      <FormLabel>Enter your Mnemonic:</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className=" max-w-lg bg-[#20242B] min-h-[90px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  className="bg-[#DB953C] hover:bg-[#f4a845]"
+                  variant={"ghost"}
+                >
+                  Submit
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>
-
-      <h1
-        className=" w-10/12 border-b py-3 border-[#1A1F26] pl-7 mt-20 mb-6 text-[12px] ml-4 text-[#ADABAA]
+      {wallets.length > 0 ? (
+        <div className="w-full ">
+          <h1
+            className=" w-10/12 border-b py-3 border-[#1A1F26] pl-7 mt-20 mb-6 text-[12px] ml-4 text-[#ADABAA]
 "
-      >
-        Total Coins - 7
-      </h1>
-      {/* <WalletTable/> */}
-      <div className=" w-10/12">
-       <WalletTable/>
-      </div>
+          >
+            Total Coins - {wallets.length}
+          </h1>
+          {/* <WalletTable/> */}
+          <div className="w-10/12 ">
+            <WalletTable />
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center w-full h-[360px]">
+          <h1 className="text-[#C78D4E] text-[20px]">No Wallets Added</h1>
+          <p className="text-gray-600">Add your first wallet to get started</p>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Wallet;
+export default Wallets;

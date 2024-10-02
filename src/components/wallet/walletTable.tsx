@@ -6,36 +6,74 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-type Props = {}
+import { ScrollArea } from "../ui/scroll-area";
+import { useDispatch, useSelector } from "react-redux";
+import { TBalanceLayout, Wallet } from "@/types/common";
+import { useLazyGetWalletBalanaceQuery } from "@/lib/rtk/query/walletDetailsSlice";
+import { updateWalletBalance } from "@/lib/rtk/slice/walletBalanceSlice";
+import { useEffect } from "react";
 
-const WalletTable = (props: Props) => {
-    
+const WalletTable = () => {
+  const dispatch = useDispatch();
+  const wallets = useSelector(
+    (state: { wallets: { wallets: Wallet[] } }) => state.wallets.wallets
+  );
+  const walletBalances = useSelector((state: TBalanceLayout) => state);
+
+  const [triggerGetBalace] = useLazyGetWalletBalanaceQuery();
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      [ // Exxample for reference
+        {
+          address: "tb1qzv6g0kat7frr50vqgh75y68q8l0mxfvp4ugphl",
+          walletName: "Satoshi Nakamoto",
+        },
+      ].forEach(async (address: Wallet) => {
+        const result = await triggerGetBalace(address.address, true);
+        if (result.data) {
+          dispatch(
+            updateWalletBalance({
+              address: address.address,
+              balance: result.data,
+            })
+          );
+        }
+      });
+    }, 18000); // 2 seconds interval
+
+    return () => clearInterval(intervalId);
+  }, [dispatch, triggerGetBalace]);
+
   return (
     <Table className="">
-    <TableHeader>
-      <TableRow className=" flex justify-around items-center flex-row bg-[#161c2300] hover:bg-[#161C23] border-none">
-        <TableHead className="ml-5">Coin</TableHead>
-        <TableHead className="ml-16">Holding</TableHead>
-        <TableHead className="ml-5">Action</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      <TableRow className=" flex text-[#ADABAA] py-3 items-center justify-around flex-row bg-[#161C23] hover:bg-[#161C23]">
-        <TableCell className="font-medium flex flex-row uppercase justify-center items-center">
-          <img src="/btc-icon.svg" className=" w-8 h-8 " alt="btc" />{" "}
-          Bitcoin
-        </TableCell>
-        <TableCell>BTC 0.00454</TableCell>
-        <TableCell>
-          <button className=" bg-transparent outline-none">
-            {" "}
-            <img src="/trash.svg" className=" w-4 h-4 " alt="" />
-          </button>{" "}
-        </TableCell>
-      </TableRow>
-    </TableBody>
-  </Table>
-      )
-}
+      <TableHeader>
+        <TableRow className=" flex justify-around items-center flex-row bg-[#161c2300] hover:bg-[#161C23] border-none">
+          <TableHead className="ml-5">Coin</TableHead>
+          <TableHead className="ml-16">Holding</TableHead>
+          <TableHead className="ml-5">Action</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <ScrollArea>
+          {wallets.map((wallet: Wallet) => {
+            const balance = walletBalances[wallet.address];
+            return (
+              <TableRow
+                key={wallet.address}
+                className="flex justify-around items-center flex-row border-b border-[#1A1F26] hover:bg-[#161C23]"
+              >
+                <TableCell className="ml-5">{wallet.walletName}</TableCell>
+                <TableCell className="ml-16">{balance?.balance}</TableCell>
+                <TableCell className="ml-5">
+                  <button className="text-[#C78D4E]">View</button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </ScrollArea>
+      </TableBody>
+    </Table>
+  );
+};
 
-export default WalletTable
+export default WalletTable;
