@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Txref } from '@/types/common';
 
 const initialState = {
   totalTransactions: 0,

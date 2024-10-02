@@ -1,6 +1,5 @@
 import NavBar from "./components/global/navbar";
 import SideBar from "./components/global/sidebar";
-import Transaction from "./components/transaction";
 import Wallet from "./components/wallet";
 
 function App() {

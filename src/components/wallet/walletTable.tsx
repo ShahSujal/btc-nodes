@@ -73,8 +73,6 @@ const WalletTable = () => {
           ].map((wallet: Wallet) => { */}
           {wallets.map((wallet: Wallet) => {
             const balance = walletBalances[wallet.address];
-            console.log(balance);
-
             return (
               <TableRow
                 key={wallet.address}

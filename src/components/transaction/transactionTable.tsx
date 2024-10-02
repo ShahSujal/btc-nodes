@@ -35,10 +35,6 @@ const TransactionTable = () => {
           wallet.address,
           true
         ); 
-
-        console.log({ result });
-        
-
         if (result.data) {
           dispatch(
             updateWalletTransactions({
@@ -55,15 +51,12 @@ const TransactionTable = () => {
 
   const sortedTransactions = useMemo(() => {
     const allTransactions = Object.values(walletTransactions).flat();
-     console.log(allTransactions);
-     
     return allTransactions.sort(
       (a: Txref, b: Txref) =>
         new Date(b.confirmed).getTime() - new Date(a.confirmed).getTime()
     );
   }, [walletTransactions]);
 
-  console.log(sortedTransactions);
   
 
   return (
