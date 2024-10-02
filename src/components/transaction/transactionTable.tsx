@@ -12,6 +12,7 @@ import { updateWalletTransactions } from "@/lib/rtk/slice/transactionSlice";
 import { TRootLayout, Txref, Wallet } from "@/types/common";
 import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { updateTotalTransactions } from "@/lib/rtk/slice/totalTransactions";
 const TransactionTable = () => {
   const dispatch = useAppDispatch();
   const wallets = useSelector(
@@ -51,10 +52,14 @@ const TransactionTable = () => {
 
   const sortedTransactions = useMemo(() => {
     const allTransactions = Object.values(walletTransactions).flat();
-    return allTransactions.sort(
+    const sorted = allTransactions.sort(
       (a: Txref, b: Txref) =>
         new Date(b.confirmed).getTime() - new Date(a.confirmed).getTime()
     );
+    dispatch(updateTotalTransactions({
+      transactions: sorted.length
+    }));
+    return sorted;
   }, [walletTransactions]);
 
   
@@ -108,10 +113,10 @@ const TransactionTable = () => {
               </TableRow>
             );
           }) : (
-            <div className="flex flex-col items-center justify-center w-full h-[260px]">
+            <TableRow className="flex flex-col items-center justify-center w-full h-[260px]">
               <h1 className="text-[#C78D4E] text-[20px]">No Transaction</h1>
               <p className="text-gray-600">Let's pay your first friend</p>
-            </div>
+            </TableRow>
           )}
         </TableBody>
       </Table>

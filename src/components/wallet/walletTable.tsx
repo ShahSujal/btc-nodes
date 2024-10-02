@@ -79,7 +79,7 @@ const WalletTable = () => {
                 className="flex justify-around items-center flex-row border-b border-[#1A1F26] hover:bg-[#161C23]"
               >
                 <TableCell className="ml-5">{wallet.walletName}</TableCell>
-                <TableCell className="ml-16">{balance?.balance}</TableCell>
+                <TableCell className="ml-16">{balance?.balance || 0} BTC</TableCell>
                 <TableCell className="ml-5">
                   <button
                     className=""

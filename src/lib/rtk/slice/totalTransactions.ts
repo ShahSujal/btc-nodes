@@ -8,9 +8,9 @@ const totalTransactionsSlice = createSlice({
   name: 'totalTransactions',
   initialState,
   reducers: {
-    updateTotalTransactions: (state, action: PayloadAction<{ index: number; transactions: number }>) => {
+    updateTotalTransactions: (state, action: PayloadAction<{transactions: number }>) => {
       const { transactions } = action.payload;
-      state.totalTransactions += transactions;
+      state.totalTransactions = transactions;
     },
     resetTotalTransactions: (state) => {
       state.totalTransactions = 0;

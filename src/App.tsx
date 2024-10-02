@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-import WalletTable from "@/components/wallet/index";
+import WalletTable from "@/components/wallet/walletTable";
 import {
   Dialog,
   DialogContent,
@@ -80,7 +80,7 @@ const App = () => {
   }
 
   return (
-    <div className="w-[calc(100%-350px)] max-sm:w-full  h-[calc(100vh-110px)]  flex flex-col items-center  ">
+    <div className="relative flex flex-col items-center w-full h-full ">
       <div className=" w-full h-[60px] flex justify-end items-end ">
         <Dialog>
           <DialogTrigger>

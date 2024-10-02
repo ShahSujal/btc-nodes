@@ -8,11 +8,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="w-full min-h-screen flex-col bg-[#1A1F26]">
+    <div className="w-full min-h-screen flex flex-col bg-[#1A1F26]">
       <NavBar />
-      <div className="flex flex-row items-center justify-center">
+      <div className="flex flex-row h-[calc(100vh-110px)] justify-center items-center w-full">
         <SideBar /> 
-          {children}
+          <div className='w-[calc(100%-350px)] max-sm:w-full relative h-full'>
+            {children}
+          </div>
       </div>
     </div>
   );

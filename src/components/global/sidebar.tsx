@@ -40,7 +40,7 @@ const SideBar: React.FC = () => {
 
   const { isOpen} = useSidebar();
   return (
-    <div className={`bg-[#161C23] w-[250px] rounded-[10px] h-[calc(100vh-110px)] flex flex-col items-start justify-between ${isOpen ? "max-sm:flex fixed left-0 top-[90px]": "max-sm:hidden"} `}>
+    <div className={`bg-[#161C23] w-[250px] relative rounded-[10px] h-[calc(100vh-110px)] flex flex-col items-start justify-between ${isOpen ? "max-sm:flex fixed left-0 top-[90px]": "max-sm:hidden"} `}>
       <div>
         {siderbarTabs.map((tab) => (
           <NavItem
