@@ -41,6 +41,7 @@ const TransactionTable = () => {
             updateWalletTransactions({
               address: wallet.address,
               transactions: result.data,
+              walletName: wallet.walletName,
             })
           );
         }
@@ -62,7 +63,7 @@ const TransactionTable = () => {
     return sorted;
   }, [walletTransactions]);
 
-  
+
 
   return (
     <div className="p-8 text-gray-300 rounded-lg">
@@ -81,7 +82,6 @@ const TransactionTable = () => {
         <TableBody className="w-full">
           {sortedTransactions.length > 0 ? sortedTransactions.map((transaction, index) => {
             const confirmedDate = transaction.confirmed ? new Date(transaction.confirmed) : null;
-
             return (
               <TableRow key={index} className="border-b border-gray-800">
                 <TableCell className="font-medium">
@@ -95,7 +95,7 @@ const TransactionTable = () => {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{transaction.spent}</TableCell>
+                <TableCell>{transaction.walletName}</TableCell>
                 <TableCell>{transaction.value}</TableCell>
                 <TableCell className="text-[#8484F1]">
                   <span className="flex items-center">
@@ -108,7 +108,7 @@ const TransactionTable = () => {
                   </span>
                 </TableCell>
                 <TableCell className="text-[#8484F1]">
-                  {confirmedDate ? confirmedDate.toTimeString() : 'N/A'}
+                  {transaction.confirmations > 10 ? "Success" : 'Pending'}
                 </TableCell>
               </TableRow>
             );

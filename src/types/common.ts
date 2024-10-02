@@ -63,4 +63,5 @@ export interface Txref {
     spent?:           boolean;
     spent_by?:        string;
     double_spend_tx?: string;
+    walletName?:      string;
 }

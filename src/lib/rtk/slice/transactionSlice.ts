@@ -7,17 +7,20 @@ const transaction = createSlice({
   name: 'wallets',
   initialState,
   reducers: {
-    updateWalletTransactions: (state, action: PayloadAction<{ address: string; transactions: Txref[] }>) => {
-      // So the approach here is we are updating each address transactions in the state  
-      const { address, transactions } = action.payload;
+    updateWalletTransactions: (state, action: PayloadAction<{ address: string; transactions: Txref[]; walletName: string }>) => {
+      // Destructure the payload
+      const { address, transactions, walletName } = action.payload;
 
-      // Initialize the state for the address if it doesn't exist example state = { 'tb1q.....ugphl': [] }
+      // Initialize the state for the address if it doesn't exist
       if (!state[address]) {
         state[address] = [];
       }
-
-      // Updating transactions for the address
-      state[address] = transactions;
+      
+      // adding walletName 
+      state[address] = transactions.map(transaction => ({
+        ...transaction,
+        walletName,
+      }));
     },
   },
 });
